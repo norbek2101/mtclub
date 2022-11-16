@@ -34,9 +34,8 @@ SPONSOR_STATUS = (
 )
 
 class Sponsor(BaseModel):
-    user = models.OneToOneField(User, on_delete = models.CASCADE, related_name="sponsor")
-
-    phone_number = models.CharField(max_length=128)
+    full_name = models.CharField(max_length=256)
+    phone_number = models.CharField(max_length=128, unique=True, db_index=True)
     balance = models.DecimalField(max_digits=19, decimal_places=2, default=0)
     spent_amount = models.DecimalField(max_digits=19, decimal_places=2, default=0)
     organization = models.CharField(max_length=128, null=True, blank=True)

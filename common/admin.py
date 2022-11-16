@@ -2,7 +2,7 @@ from django.contrib import admin
 from common.models import Sponsor, Student, University, Sponsorship
 
 class SponsorAdmin(admin.ModelAdmin):
-    list_display = ['user', 'id', 'phone_number',  'balance', 'spent_amount', 'organization', 'type', 'status']
+    list_display = ['full_name', 'id', 'phone_number',  'balance', 'spent_amount', 'organization', 'type', 'status']
     list_editable = ['phone_number', 'type', 'status']
 
 
