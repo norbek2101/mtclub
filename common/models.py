@@ -12,13 +12,13 @@ class BaseModel(models.Model):
         abstract = True
 
 
-JISMONIY_SHAXS = "Физическое-лицо"
-YURIDIK_SHAXS = "Юридическое-лицо"
+JISMONIY_SHAXS = "jismoniy_shaxs"
+YURIDIK_SHAXS = "yuridik_shaxs"
 
-YANGI = "новый"
-MODERATSIYADA = "умеренно"
-TASDIQLANGAN = "подтвержденный"
-BEKOR_QILINGAN = "отмененный"
+YANGI = "yangi"
+MODERATSIYADA = "moderatsiyada"
+TASDIQLANGAN = "tasdiqlangan"
+BEKOR_QILINGAN = "bekor_qilingan"
 
 
 SPONSOR_TYPE = (
@@ -44,7 +44,7 @@ class Sponsor(BaseModel):
     status = models.CharField(max_length=50, choices=SPONSOR_STATUS, default=SPONSOR_STATUS[0][1])
    
     def __str__(self):
-        return f"{self.user.full_name}"
+        return f"{self.full_name}"
 
     class Meta:
         ordering = ('-id',)
