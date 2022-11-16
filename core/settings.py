@@ -42,18 +42,25 @@ DJANGO_APPS = [
 
 
 CUSTOM_APPS = [
-
+    "accounts.apps.AccountsConfig",
+    "common.apps.CommonConfig",
 ]
 
 
 THIRD_PARTY_APPS = [
     "rest_framework", 
+    'rest_framework.authtoken',
+    'dj_rest_auth',
     "drf_yasg", 
     "corsheaders",
     "modeltranslation", 
     "django_filters"
 ]
 
+
+
+
+REST_USE_JWT = True
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
