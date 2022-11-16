@@ -1,7 +1,7 @@
 from common.models import Sponsor, Student, University, Sponsorship
 
 from common.serializers.base_serializers import RegisterSponsorSerializer, ListSponsorsSerializer, DetailSponsorSerializer, \
-    UpdateSponsorSerializer, RegisterStudentSerializer, CreateUniversitySerializer, ListStudentsSerializer, \
+    RegisterStudentSerializer, CreateUniversitySerializer, ListStudentsSerializer, \
     DetailStudentSerializer, UpdateStudentSerializer, SponsorshipSerializer, UpdateSponsorshipSerializer, \
     LineDashboardSponsorsSerializer, LineDashboardStudentsSerializer
 
@@ -25,6 +25,29 @@ class ListSponsorsView(generics.ListAPIView):
 
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ('status', 'balance')
-    search_fields = ('name',)
 
 
+class DetailSponsorView(generics.RetrieveDestroyAPIView, generics.GenericAPIView):
+    queryset = Sponsor.objects.all()
+    serializer_class = DetailSponsorSerializer
+    parser_classes = [parsers.MultiPartParser]
+    pagination_class = CustomPagination
+    lookup_field = 'id'
+
+    def get_queryset(self):
+        queryset = self.queryset
+        if self.kwargs.get('id', None):
+            queryset = queryset.filter(id=self.kwargs['id'])
+
+        return queryset
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+
+class CreateUniversityView(generics.ListCreateAPIView):
+    queryset = University.objects.all()
+    serializer_class = CreateUniversitySerializer
+    pagination_class = CustomPagination
+
+    permission_classes = [permissions.IsAuthenticated]

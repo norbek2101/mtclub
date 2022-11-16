@@ -28,13 +28,7 @@ class ListSponsorsSerializer(serializers.ModelSerializer):
 class DetailSponsorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sponsor
-        fields = ('name', 'phone_number', 'balance', 'status', 'organization')
-
-
-class UpdateSponsorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Sponsor
-        fields = ('full_name', 'type', 'phone_number', 'balance', 'status', 'organization')
+        fields = ('full_name', 'phone_number', 'balance', 'status', 'organization', 'type')
 
 
 class CreateUniversitySerializer(serializers.ModelSerializer):
@@ -108,10 +102,10 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
 class LineDashboardStudentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ('name', 'created_at')
+        fields = ('full_name', 'created_at')
 
 
 class LineDashboardSponsorsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sponsor
-        fields = ('name', 'created_at')
+        fields = ('full_name', 'created_at')
