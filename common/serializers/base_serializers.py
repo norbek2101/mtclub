@@ -2,10 +2,21 @@ from rest_framework import serializers
 from common.models import Sponsor, Student, University, Sponsorship
 
 
-class RegisterSponsorSerializer(serializers.ModelSeializer):
+class RegisterSponsorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sponsor
-        fields = ('full_name', 'phone_number', 'balance', 'spent_amount', 'organization', 'type', 'status')
+        fields = ('full_name', 'phone_number', 'balance', 'organization', 'type')
+
+    
+    def validate(self, attrs):
+        if attrs['type'] == "yuridik_shaxs":
+            try:
+                org = attrs['organization']
+            except:
+                raise serializers.ValidationError({
+                    'organization': "Siz yuridik_shaxs ekansiz, kompaniya yoki tashkilot nomini kiritishingiz kerak"
+                })
+        return attrs
 
     
 class ListSponsorsSerializer(serializers.ModelSerializer):
