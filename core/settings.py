@@ -51,20 +51,10 @@ THIRD_PARTY_APPS = [
     "rest_framework", 
     "drf_yasg", 
     "corsheaders",
-    "modeltranslation", 
     "django_filters"
 ]
 
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.SessionAuthentication",),
-    "DEFAULT_FILTER_BACKENDS": (
-        "django_filters.rest_framework.DjangoFilterBackend",
-        "rest_framework.filters.SearchFilter",
-    ),
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 10,
-}
 
 REST_USE_JWT = True
 
@@ -139,7 +129,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "ru"
+LANGUAGE_CODE = "uz"
 
 TIME_ZONE = 'Asia/Tashkent'
 
@@ -148,27 +138,6 @@ USE_I18N = True
 USE_TZ = True
 
 AUTH_USER_MODEL = "accounts.User"
-
-
-MODELTRANSLATION_DEFAULT_LANGUAGE = "ru"
-MODELTRANSLATION_LANGUAGES = ("ru", "uz")
-MODELTRANSLATION_FALLBACK_LANGUAGES = ("ru", "uz")
-
-
-def gettext(s):
-    return s
-
-
-LANGUAGES = (
-    ("ru", gettext("Русский")),
-    ("uz", gettext("O'zbekcha")),
-)
-
-MODELTRANSLATION_TRANSLATION_FILES = (
-    # "apps.common.translations",
-    # "apps.product.translations",
-    # "apps.information.translations",
-)
 
 
 # Static files (CSS, JavaScript, Images)
