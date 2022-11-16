@@ -6,8 +6,9 @@ from common.serializers.base_serializers import RegisterSponsorSerializer, ListS
     LineDashboardSponsorsSerializer, LineDashboardStudentsSerializer
 
 from rest_framework import generics, permissions, parsers
+from rest_framework.views import Response
 from django_filters.rest_framework import DjangoFilterBackend
-
+from django.db import models
 from core.custom_pagination import CustomPagination
 
 class RegisterSponsorView(generics.CreateAPIView):
@@ -96,3 +97,62 @@ class UpdateStudentView(generics.GenericAPIView):
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
+
+
+class CreateSponsorshipView(generics.CreateAPIView):
+    queryset = Sponsorship.objects.all()
+    serializer_class = SponsorshipSerializer
+    pagination_class = CustomPagination
+    parser_classes = [parsers.MultiPartParser]
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class UpdateSponsorshipView(generics.RetrieveDestroyAPIView, generics.GenericAPIView):
+    queryset = Sponsorship.objects.all()
+    serializer_class = UpdateSponsorshipSerializer
+    pagination_class = CustomPagination
+    parser_classes = [parsers.MultiPartParser]
+    lookup_field = 'id'
+
+    def get_queryset(self):
+        queryset = self.queryset
+        if self.kwargs.get('id', None):
+            queryset = queryset.filter(id=self.kwargs['id'])
+
+        return queryset
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+
+class DashboardData(generics.ListAPIView):
+    serializer_class = UpdateSponsorshipSerializer
+    pagination_class = CustomPagination
+
+    def get(self, request, format=None):
+        try:
+            total_spent = Sponsor.objects.aggregate(total_sponsors_spent=models.Sum('spent_amount'))
+            total_contract = Student.objects.aggregate(total_contract=models.Sum('contract'))
+
+            total_spent = total_spent['total_sponsors_spent']
+            total_contract = total_contract['total_contract']
+
+            required_amount = total_contract - total_spent
+
+            return Response({'total_sponsors_spent': total_spent,
+                            'total_contract': total_contract,
+                            'required_amount': required_amount})
+        except TypeError:
+            return Response({"error": f"total_contract --- is None or total_contract--- is None"})
+
+
+class DashboardLineStudent(generics.ListAPIView):
+    queryset = Student.objects.all()
+    serializer_class = LineDashboardStudentsSerializer
+    pagination_class = CustomPagination
+
+
+class DashboardLineSponsor(generics.ListAPIView):
+    queryset = Sponsor.objects.all()
+    serializer_class = LineDashboardSponsorsSerializer
+    pagination_class = CustomPagination

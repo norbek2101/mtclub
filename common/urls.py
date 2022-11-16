@@ -13,4 +13,11 @@ urlpatterns = [
     path("students/", base_view.ListStudentsView.as_view(), name="students"),
     path('student/<int:id>/', base_view.DetailStudentView.as_view(), name="detail_student"),
     path('student/update/<int:id>/', base_view.UpdateStudentView.as_view(), name="update_student"),
+
+    path("sponsorship/create", base_view.CreateSponsorshipView.as_view(), name="create_sponsorship"),
+    path('sponsorship/update/<int:id>/', base_view.UpdateSponsorshipView.as_view(), name="update_sponsorship"),
+
+    path("dashboard/", base_view.DashboardData.as_view(), name="dashboard"),
+    path("dashboard/students", base_view.DashboardLineStudent.as_view(), name="dashboard_student"),
+    path("dashboard/sponsor", base_view.DashboardLineSponsor.as_view(), name="dashboard_sponsor"),
 ]
