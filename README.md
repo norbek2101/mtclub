@@ -56,6 +56,7 @@ university
 
 student
 ```bash
+* api/v1/common/student/register/ REGISTER STUDENT (POST)
 * api/v1/common/students/ - STUDENTS LIST (GET)
 * api/v1/common/student/1/ - DETAIL STUDENT (GET)
 * api/v1/common/student/update/1/ - UPDATE SPONSOR (PUT)
