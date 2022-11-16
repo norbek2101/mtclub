@@ -49,8 +49,6 @@ CUSTOM_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework", 
-    'rest_framework.authtoken',
-    'dj_rest_auth',
     "drf_yasg", 
     "corsheaders",
     "modeltranslation", 
@@ -58,11 +56,21 @@ THIRD_PARTY_APPS = [
 ]
 
 
-
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.SessionAuthentication",),
+    "DEFAULT_FILTER_BACKENDS": (
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+    ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 10,
+}
 
 REST_USE_JWT = True
 
+
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
+
 
 
 MIDDLEWARE = [
@@ -131,7 +139,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "uz"
+LANGUAGE_CODE = "ru"
 
 TIME_ZONE = 'Asia/Tashkent'
 
@@ -139,11 +147,12 @@ USE_I18N = True
 
 USE_TZ = True
 
+AUTH_USER_MODEL = "accounts.User"
 
 
-MODELTRANSLATION_DEFAULT_LANGUAGE = "uz"
-MODELTRANSLATION_LANGUAGES = ("uz", "ru")
-MODELTRANSLATION_FALLBACK_LANGUAGES = ("uz", "ru")
+MODELTRANSLATION_DEFAULT_LANGUAGE = "ru"
+MODELTRANSLATION_LANGUAGES = ("ru", "uz")
+MODELTRANSLATION_FALLBACK_LANGUAGES = ("ru", "uz")
 
 
 def gettext(s):
@@ -151,8 +160,8 @@ def gettext(s):
 
 
 LANGUAGES = (
-    ("uz", gettext("O'zbekcha")),
     ("ru", gettext("Русский")),
+    ("uz", gettext("O'zbekcha")),
 )
 
 MODELTRANSLATION_TRANSLATION_FILES = (
@@ -166,7 +175,7 @@ MODELTRANSLATION_TRANSLATION_FILES = (
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MEDIA_URL = "/media/"
@@ -176,24 +185,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-###################################################################
-# Django security
-###################################################################
-
-"""
-IF YOU WANT SET CSRF_TRUSTED_ORIGINS = ["*"] THEN YOU SHOULD SET:
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-"""
-
-CSRF_COOKIE_SECURE = True
-# CSRF_TRUSTED_ORIGINS = [""]
-
-###################################################################
-# CORS
-###################################################################
-
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
-# CORS_ALLOW_HEADERS = [""]
