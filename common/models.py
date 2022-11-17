@@ -33,6 +33,18 @@ SPONSOR_STATUS = (
     (BEKOR_QILINGAN, "bekor_qilingan"),
 )
 
+
+UZCARD = "uzcard"
+HUMO = "humo"
+VISA = "visa"
+
+PAYMENT_TYPE = (
+    (UZCARD, "uzcard"),
+    (HUMO, "humo"),
+    (VISA, "visa"),
+)
+
+
 class Sponsor(BaseModel):
     full_name = models.CharField(max_length=256)
     phone_number = models.CharField(max_length=128, unique=True, db_index=True)
@@ -42,14 +54,15 @@ class Sponsor(BaseModel):
 
     type = models.CharField(max_length=50, choices=SPONSOR_TYPE, default=SPONSOR_TYPE[1][1])
     status = models.CharField(max_length=50, choices=SPONSOR_STATUS, default=SPONSOR_STATUS[0][1])
+    payment_type = models.CharField(max_length=50, choices=PAYMENT_TYPE, default=PAYMENT_TYPE[0][1])
    
     def __str__(self):
         return f"{self.full_name}"
 
     class Meta:
         ordering = ('-id',)
-        verbose_name = _("Спонсор")
-        verbose_name_plural = _("Спонсоры")
+        verbose_name = _("Homiy")
+        verbose_name_plural = _("Homiylar")
 
 
 class University(BaseModel):
