@@ -5,7 +5,7 @@ from common.models import Sponsor, Student, University, Sponsorship
 class RegisterSponsorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sponsor
-        fields = ('full_name', 'phone_number', 'balance', 'organization', 'type')
+        fields = ('full_name', 'phone_number', 'balance', 'organization', 'type', 'payment_type')
 
     
     def validate(self, attrs):
@@ -22,13 +22,13 @@ class RegisterSponsorSerializer(serializers.ModelSerializer):
 class ListSponsorsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sponsor
-        fields = ('full_name', 'phone_number', 'balance', 'spent_amount', 'created_at', 'status')
+        fields = ('full_name', 'phone_number', 'balance', 'spent_amount', 'created_at', 'status', 'type', 'payment_type')
 
 
 class DetailSponsorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sponsor
-        fields = ('full_name', 'phone_number', 'balance', 'status', 'organization', 'type')
+        fields = ('full_name', 'phone_number', 'balance', 'status', 'organization', 'type', 'payment_type')
 
 
 class CreateUniversitySerializer(serializers.ModelSerializer):
