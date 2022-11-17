@@ -16,6 +16,9 @@ urlpatterns = [
 
     path("sponsorship/create", base_view.CreateSponsorshipView.as_view(), name="create_sponsorship"),
     path('sponsorship/update/<int:id>/', base_view.UpdateSponsorshipView.as_view(), name="update_sponsorship"),
+    path('sponsorship/student_sponsors/<int:id>/', base_view.StudentSponsorsViews.as_view(), name="student-sponsors"),
+    path('sponsorship/sponsor_students/<int:id>/', base_view.SponsorStudentsViews.as_view(), name="sponsor-studets"),
+
 
     path("dashboard/", base_view.DashboardData.as_view(), name="dashboard"),
     path("dashboard/students", base_view.DashboardLineStudent.as_view(), name="dashboard_student"),

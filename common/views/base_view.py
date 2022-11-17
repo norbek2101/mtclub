@@ -187,3 +187,56 @@ class DashboardLineSponsor(generics.ListAPIView):
     queryset = Sponsor.objects.all()
     serializer_class = LineDashboardSponsorsSerializer
     pagination_class = CustomPagination
+
+
+class StudentSponsorsViews(generics.RetrieveAPIView):
+    queryset = Student.objects.all()
+    serializer_class = ListSponsorsSerializer
+    pagination_class = CustomPagination
+
+
+    def get(self, request, id, format=None):
+        """Talaba id si bo'yicha unga homiylik qilgan homiylar ro'yxatini qaytaradi"""
+        sponsors = Sponsorship.objects.filter(student=id).values_list("sponsor")
+        ls =  [list(i) for i in set(sponsors)]
+        sponsor_ids = [i[0] for i in ls]
+        res = []
+        for i in sponsor_ids:
+            dic = {}
+            query = Sponsor.objects.get(id=i)
+            dic['id'] = query.id
+            dic['full_name'] = query.full_name
+            dic['phone_number'] = query.phone_number
+            dic['spent_amount'] = query.spent_amount
+            dic['status'] = query.status
+            dic['type'] = query.type
+            dic['payment_type'] = query.payment_type
+            dic['created_at'] = str(query.created_at)
+            res.append(dic)
+        return Response(res)
+
+
+class SponsorStudentsViews(generics.RetrieveAPIView):
+    queryset = Sponsor.objects.all()
+    serializer_class = ListStudentsSerializer
+    pagination_class = CustomPagination
+
+
+    def get(self, request, id, format=None):
+        """Homiy id si bo'yicha u homiylik qilgan talabalar ro'yxatini qaytaradi"""
+        students = Sponsorship.objects.filter(sponsor=id).values_list("student")
+        ls =  [list(i) for i in set(students)]
+        student_ids = [i[0] for i in ls]
+        res = []
+        for i in student_ids:
+            dic = {}
+            query = Student.objects.get(id=i)
+            dic['id'] = query.id
+            dic['full_name'] = query.full_name
+            dic['balance'] = query.balance
+            dic['contract'] = query.contract
+            dic['type'] = query.type
+            dic['university'] = query.university.name
+            dic['created_at'] = str(query.created_at)
+            res.append(dic)
+        return Response(res)
