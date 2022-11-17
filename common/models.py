@@ -108,8 +108,8 @@ class Student(BaseModel):
 
 
 class Sponsorship(BaseModel):
-    sponsor = models.ForeignKey(Sponsor, on_delete=models.CASCADE, related_name='sponsors')
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='students')
+    sponsor = models.ForeignKey(Sponsor, on_delete=models.CASCADE, related_name='students')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='sponsors')
     amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
     def __str__(self):
