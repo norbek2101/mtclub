@@ -1,3 +1,4 @@
+import decimal
 from common.models import Sponsor, Student, University, Sponsorship
 
 from common.serializers.base_serializers import RegisterSponsorSerializer, ListSponsorsSerializer, DetailSponsorSerializer, \
@@ -8,6 +9,7 @@ from common.serializers.base_serializers import RegisterSponsorSerializer, ListS
 from rest_framework import generics, permissions, parsers
 from rest_framework.views import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from django.db import models
 from core.custom_pagination import CustomPagination
 
@@ -24,11 +26,12 @@ class ListSponsorsView(generics.ListAPIView):
     serializer_class = ListSponsorsSerializer
     pagination_class = CustomPagination
 
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ('status', 'balance')
+    search_fields = ('full_name', 'balance', 'created_at')
 
 
-class DetailSponsorView(generics.RetrieveDestroyAPIView, generics.GenericAPIView):
+class DetailSponsorView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sponsor.objects.all()
     serializer_class = DetailSponsorSerializer
     parser_classes = [parsers.MultiPartParser]
@@ -41,9 +44,6 @@ class DetailSponsorView(generics.RetrieveDestroyAPIView, generics.GenericAPIView
             queryset = queryset.filter(id=self.kwargs['id'])
 
         return queryset
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
 
 
 class CreateUniversityView(generics.ListCreateAPIView):
@@ -68,9 +68,9 @@ class ListStudentsView(generics.ListAPIView):
     serializer_class = ListStudentsSerializer
     pagination_class = CustomPagination
 
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ('type', 'university')
-    search_fields = ('name',)
+    search_fields = ('full_name', 'balance', 'created_at')
 
 
 class DetailStudentView(generics.RetrieveDestroyAPIView):
@@ -88,15 +88,14 @@ class DetailStudentView(generics.RetrieveDestroyAPIView):
         return queryset
 
 
-class UpdateStudentView(generics.GenericAPIView):
+class UpdateStudentView(generics.UpdateAPIView):
     queryset = Student.objects.all()
     serializer_class = UpdateStudentSerializer
     pagination_class = CustomPagination
     parser_classes = [parsers.MultiPartParser]
     lookup_field = 'id'
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+    
 
 
 class CreateSponsorshipView(generics.CreateAPIView):
@@ -107,7 +106,41 @@ class CreateSponsorshipView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class UpdateSponsorshipView(generics.RetrieveDestroyAPIView, generics.GenericAPIView):
+    def post(self, request):
+        try:
+            sponsor = Sponsor.objects.get(id=request.data['sponsor'])
+            student = Student.objects.get(id=request.data['student'])
+            serializer = SponsorshipSerializer(data=request.data)
+            valid = serializer.is_valid()
+            if valid:
+                serializer.save()
+                amount = decimal.Decimal(serializer.data['amount'])
+                if amount > sponsor.balance:
+                    return Response({"amount": f"Kiritilgan summa sponsorning balansidan kichik bo'lishi kerak"})
+                if amount + student.balance > student.contract:
+                    return Response({'amount': "Talabaga ajratilayotgan summa kontrakt summasidan kichik bo'lishi kerak!"})
+
+                sponsor.balance -= amount
+                sponsor.spent_amount += amount
+                student.balance += amount
+                student.save()
+                sponsor.save()
+                return Response(serializer.data)
+            else:
+                return Response({"error":f"{serializer.errors}"})
+
+        except Sponsor.DoesNotExist or Student.DoesNotExist:
+            return Response({"error": f"{request.data['sponsor']} or {request.data['student']} is not found"})
+        except Exception as e:
+            return Response({"error": f"{e}"})
+
+        finally:
+            pass
+                   
+
+
+
+class UpdateSponsorshipView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sponsorship.objects.all()
     serializer_class = UpdateSponsorshipSerializer
     pagination_class = CustomPagination
@@ -121,8 +154,6 @@ class UpdateSponsorshipView(generics.RetrieveDestroyAPIView, generics.GenericAPI
 
         return queryset
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
 
 
 class DashboardData(generics.ListAPIView):
