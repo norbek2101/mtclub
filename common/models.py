@@ -5,8 +5,8 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_("Дата создания"),)
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Дата изменение"),)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -73,12 +73,12 @@ class University(BaseModel):
 
     class Meta:
         ordering = ('-id',)
-        verbose_name = _("Университет")
-        verbose_name_plural = _("Университеты")
+        verbose_name = _("Universitet")
+        verbose_name_plural = _("Universitetlar")
 
 
-BAKALAVR = "бакалавр"
-MAGISTR = "магистр"
+BAKALAVR = "bakalavr"
+MAGISTR = "magistr"
 
 
 STUDENT_TYPE = (
@@ -103,8 +103,8 @@ class Student(BaseModel):
 
     class Meta:
         ordering = ("-id",)
-        verbose_name = _("Студент")
-        verbose_name_plural = _("СтудентЫ")
+        verbose_name = _("Talaba")
+        verbose_name_plural = _("Talabalar")
 
 
 class Sponsorship(BaseModel):
@@ -117,5 +117,5 @@ class Sponsorship(BaseModel):
 
     class Meta:
         ordering = ("-id",)
-        verbose_name = _("Спонсорство")
-        verbose_name_plural = _("Спонсорство")
+        verbose_name = _("Homiylik")
+        verbose_name_plural = _("Homiyliklar")
