@@ -18,7 +18,7 @@ env\Scripts\activate
 
 ### install packages
 ```bash
-pip install -r requirements.txt
+pip install -r requirements/base.txt
 ```
 
 ### execute models
