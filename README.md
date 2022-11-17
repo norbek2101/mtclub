@@ -37,6 +37,8 @@ python manage.py runserver
 admin
 ``` bash
 * api/v1/common/login/ - LOGIN API FOR ADMIN (POST)
+* api/v1/common/login/token/refresh/ - REFRESH TOKEN (POST)
+* api/v1/common/login/token/verify/ - TOKEN VERIFY (POST)
 ```
 
 sponsor
@@ -69,6 +71,8 @@ sponsorship
 * api/v1/common/sponsorship/update/1/ - SPONSORSHIP DETAIL (GET)
 * api/v1/common/sponsorship/update/1/ - SPONSORSHIP UPDATE  (PUT)
 * api/v1/common/sponsorship/update/1/ - SPONSORSHIP DELETE (DELETE)
+* /api/v1/common/sponsorship/sponsor_students/1/ - SPONSOR STUDENTS (GET)
+* api/v1/common/sponsorship/student_sponsors/1/ - STUDENT SPONSORS (GET)
 ```
 
 
